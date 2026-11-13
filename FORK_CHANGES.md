@@ -35,6 +35,13 @@ when running `git merge upstream/<tag>`.
 - `config/initializers/audit_sign_in.rb` records sign-ins through a Warden hook (one row per account).
 - Not covered: sign-out (token sign-out does not go through Warden), Message deletion, AgentBot, IP geolocation (`city`/`country` stay empty).
 
+## Capacity-based assignment (Phase 4)
+- Models `AgentCapacityPolicy`, `InboxCapacityLimit`; associations via `Custom::Concerns::{Account,AccountUser,Inbox}`.
+- Admin-only API: `agent_capacity_policies` CRUD plus nested `users` and `inbox_limits` (`AgentCapacityPolicyPolicy`).
+- `Custom::AgentCapacity` decides eligibility; wired in through `Custom::Inbox#member_ids_with_assignment_capacity` (legacy auto-assignment) and `Custom::AutoAssignment::AssignmentService#filter_agents_by_rate_limit` (assignment v2).
+- Rule: an agent whose policy has a limit for the inbox is skipped once their open conversations there reach it (excluded labels and conversations idle longer than `exclude_older_than_hours` do not count). No policy or no limit = unlimited.
+- Not covered: the per-agent `capacity` value the UI sends (no column exists, ignored) and the `balanced` assignment order (the enum stays round_robin only).
+
 ## New files in upstream folders (no merge conflicts expected)
 - `config/routes/tickets.rb` (loaded by `draw :tickets` in `config/routes.rb`, which is one added upstream line)
 - `config/locales/tickets.en.yml`

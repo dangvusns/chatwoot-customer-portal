@@ -3,5 +3,6 @@ module Custom::Concerns::Account
 
   included do
     has_many :custom_roles, dependent: :destroy
+    has_many :agent_capacity_policies, dependent: :destroy
   end
 end
