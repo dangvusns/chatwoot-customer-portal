@@ -1,0 +1,54 @@
+en:
+  activemodel:
+    errors:
+      messages:
+        too_many: "allows at most %{count} files"
+        too_large: "includes a file larger than 10 MB"
+  tickets:
+    support:
+      title: Contact support
+      intro: Tell us what is going on and our team will get back to you.
+      name: Your name
+      email: Email address
+      issue_type: Issue type
+      issue_type_prompt: Select an issue type
+      message: How can we help?
+      attachments: Attachments (up to 5 files, 10 MB each)
+      submit: Submit ticket
+    show:
+      ticket: "Ticket #%{number}"
+      submitter: Submitter
+      date_submitted: Date submitted
+      last_updated: Last updated
+      issue_type: Issue type
+      source: Source
+      messages: Messages
+      support_team: Support
+      reply: Reply
+      send_reply: Send reply
+      reopen_hint: Replying will reopen this ticket.
+      attachment: Attachment
+    status:
+      open: In progress
+      pending: Waiting for your reply
+      snoozed: In progress
+      resolved: Complete
+    source:
+      support_portal: Support portal
+    flash:
+      submitted: "Your ticket #%{number} was submitted. Keep this page's link to follow up on it."
+      replied: Your reply was sent.
+    not_found:
+      title: Ticket not found
+      body: This link is invalid or has expired.
+    mailer:
+      view_ticket: View your ticket
+      received:
+        subject: "[Ticket #%{number}] We received your request"
+        body: "Thanks for contacting us. Your request is ticket #%{number}. We will reply as soon as we can."
+      agent_reply:
+        subject: "[Ticket #%{number}] New reply from support"
+        body: "Our support team replied to your ticket #%{number}:"
+      resolved:
+        subject: "[Ticket #%{number}] Your ticket is complete"
+        body: "Your ticket #%{number} was marked complete. If you still need help, open the ticket and reply to reopen it."

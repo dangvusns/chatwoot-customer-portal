@@ -19,5 +19,16 @@ when running `git merge upstream/<tag>`.
 | `app/javascript/dashboard/routes/dashboard/settings/customRoles/customRole.routes.js` | Add `COMMUNITY` to `installationTypes` |
 | `app/javascript/dashboard/routes/dashboard/settings/sla/sla.routes.js` | Add `COMMUNITY` to `installationTypes` |
 
+## New files in upstream folders (no merge conflicts expected)
+- `config/routes/tickets.rb` (loaded by `draw :tickets` in `config/routes.rb`, which is one added upstream line)
+- `config/locales/tickets.en.yml`
+- `config/initializers/rack_attack_tickets.rb`
+- `lib/tasks/tickets.rake` (`rails tickets:setup` creates the portal inbox and issue types)
+- `spec/custom/**`
+
+## Ticket portal (Phase 1)
+- Needs env `TICKET_PORTAL_INBOX_ID` (printed by `rails tickets:setup`) and `FRONTEND_URL`; SMTP for emails.
+- Pages: `/support` (form), `/tickets/:token` (ticket page + reply). Links use signed ids valid 180 days.
+
 ## Decisions
 - `ChatwootApp.enterprise?` stays false (true would activate gated routes for calls, SAML, captain).
