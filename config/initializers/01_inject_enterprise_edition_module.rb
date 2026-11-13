@@ -72,6 +72,9 @@ module InjectEnterpriseEditionModule
       extension_namespace =
         const_get_maybe_false(namespace, extension_name.camelize)
 
+      # Fork: enterprise/ is removed, so its namespace may not exist
+      next unless extension_namespace
+
       extension_module =
         const_get_maybe_false(extension_namespace, constant_name)
 
