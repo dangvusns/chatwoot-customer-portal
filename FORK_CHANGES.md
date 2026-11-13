@@ -19,6 +19,16 @@ when running `git merge upstream/<tag>`.
 | `app/javascript/dashboard/routes/dashboard/settings/customRoles/customRole.routes.js` | Add `COMMUNITY` to `installationTypes` |
 | `app/javascript/dashboard/routes/dashboard/settings/sla/sla.routes.js` | Add `COMMUNITY` to `installationTypes` |
 
+| `app/views/api/v1/models/_agent.json.jbuilder` | `custom_role_id` always emitted (was enterprise-only) |
+| `app/views/api/v1/models/_user.json.jbuilder` | emit `custom_role_id` per account |
+
+## Custom roles (Phase 3)
+- `custom/app/models/custom_role.rb` plus `Custom::Concerns::Account`, `Custom::Concerns::AccountUser`, `Custom::AccountUser` (permissions override)
+- `Api::V1::Accounts::CustomRolesController` (admin only) and `Custom::Api::V1::Accounts::AgentsController` (assign/clear `custom_role_id`)
+- Policy overrides under `custom/app/policies/custom/` and `Custom::Conversations::PermissionFilterService`
+- Semantics (inferred, not copied): conversation_manage = all in agent inboxes; conversation_unassigned_manage = unassigned or own; conversation_participating_manage = own or participating; contact_manage / report_manage / knowledge_base_manage open the matching admin-only actions.
+- Not covered: controllers that check `administrator?` directly (e.g. some report endpoints) and the public help center controller hooks.
+
 ## New files in upstream folders (no merge conflicts expected)
 - `config/routes/tickets.rb` (loaded by `draw :tickets` in `config/routes.rb`, which is one added upstream line)
 - `config/locales/tickets.en.yml`
