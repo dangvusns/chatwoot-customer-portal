@@ -19,6 +19,8 @@ when running `git merge upstream/<tag>`.
 | `app/javascript/dashboard/routes/dashboard/settings/customRoles/customRole.routes.js` | Add `COMMUNITY` to `installationTypes` |
 | `app/javascript/dashboard/routes/dashboard/settings/sla/sla.routes.js` | Add `COMMUNITY` to `installationTypes` |
 
+| `app/views/api/v1/conversations/partials/_conversation.json.jbuilder` | render the custom SLA partial (one added line) |
+| `config/schedule.yml` | add the `process_applied_slas_job` entry |
 | `app/views/api/v1/models/_agent.json.jbuilder` | `custom_role_id` always emitted (was enterprise-only) |
 | `app/views/api/v1/models/_user.json.jbuilder` | emit `custom_role_id` per account |
 
@@ -41,6 +43,14 @@ when running `git merge upstream/<tag>`.
 - `Custom::AgentCapacity` decides eligibility; wired in through `Custom::Inbox#member_ids_with_assignment_capacity` (legacy auto-assignment) and `Custom::AutoAssignment::AssignmentService#filter_agents_by_rate_limit` (assignment v2).
 - Rule: an agent whose policy has a limit for the inbox is skipped once their open conversations there reach it (excluded labels and conversations idle longer than `exclude_older_than_hours` do not count). No policy or no limit = unlimited.
 - Not covered: the per-agent `capacity` value the UI sends (no column exists, ignored) and the `balanced` assignment order (the enum stays round_robin only).
+
+## SLA policies (Phase 2)
+- Models `SlaPolicy`, `AppliedSla`, `SlaEvent`; `Custom::Concerns::Conversation` adds `sla_policy`, `applied_sla`, `sla_events` and restarts tracking whenever `sla_policy_id` changes; `Custom::ActionService#add_sla` is the automation action.
+- API: `sla_policies` CRUD (read open to agents, write admin only); `applied_slas` list / metrics / CSV for the SLA report (same access as other reports: administrators and custom roles with `report_manage`).
+- `Custom::Sla::ProcessAppliedSlasJob` runs every minute (entry in `config/schedule.yml`), using `Custom::Sla::Evaluator` to record first response (frt), next response (nrt) and resolution (rt) misses and to close the SLA as hit or missed once the conversation is resolved. `Custom::Sla::DueTime` counts business hours from the inbox working hours when a policy asks for it.
+- Upstream edit: `app/views/api/v1/conversations/partials/_conversation.json.jbuilder` adds `applied_sla` and `sla_events` through `custom/api/v1/conversations/partials/_sla`.
+- Semantics (inferred): next-response clock runs from `waiting_since`; a late first reply counts as a miss; resolution is judged when the job runs (up to a minute of delay).
+- Not covered: SLA missed notifications (the notification types exist but nothing creates them), pausing the clock while snoozed or pending, and N+1 queries when listing many conversations with SLAs.
 
 ## New files in upstream folders (no merge conflicts expected)
 - `config/routes/tickets.rb` (loaded by `draw :tickets` in `config/routes.rb`, which is one added upstream line)
