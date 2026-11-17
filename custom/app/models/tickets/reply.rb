@@ -12,5 +12,8 @@ class Tickets::Reply
 
     Tickets::Portal.post_customer_message(conversation, content: content, attachments: attachments)
     true
+  rescue ActiveRecord::RecordInvalid => e
+    errors.add(:base, e.record.errors.full_messages.join(', '))
+    false
   end
 end

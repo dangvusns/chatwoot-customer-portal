@@ -1,5 +1,1 @@
-<%= t('tickets.mailer.agent_reply.body', number: @conversation.display_id) %>
-
-<%= @message.content %>
-
-<%= t('tickets.mailer.view_ticket') %>: <%= @ticket_url %>
+<%= render "notification" %>

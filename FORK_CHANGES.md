@@ -65,3 +65,46 @@ when running `git merge upstream/<tag>`.
 
 ## Decisions
 - `ChatwootApp.enterprise?` stays false (true would activate gated routes for calls, SAML, captain).
+
+## Customer portal account foundation (in progress)
+- Isolated development at `/premium-support`; administrator-only `portal_customers` API and Settings page.
+- Dedicated `PortalCustomer` identity linked to an existing account/contact, expiring activation/reset links, versioned sessions and suspension.
+- Rails-generated `CreatePortalCustomers` migration; unique contact identity index.
+- Upstream integration edits: settings route registration, sidebar entry, Tailwind custom-view scan path, and ticket-route/throttle additions.
+- English/Vietnamese account screens and invitation/reset emails. Local isolated test container configuration.
+- Full scope, remaining milestones and acceptance checks: `docs/customer-portal.md`.
+- This foundation does not yet replace guest ticket routes, implement the full ticket workflow, or ingest email replies.
+
+## Authenticated customer ticket submission (in progress)
+- Submit-ticket button/form, customer-bound identity, full-catalog product selection, subject and native urgency.
+- Own-ticket detail/history, replies, close/reopen and authenticated public attachment streaming.
+- Reuses the existing `Tickets::Submission`, `Tickets::Reply`, conversation/message builders and Custom Attributes product catalog.
+- Registered customers' notification links point to authenticated ticket pages; legacy guest routes remain until migration.
+- Regression suite: `spec/custom/requests/premium_support_tickets_spec.rb`; all 165 custom examples pass; Ruby lint (23 files) and frontend lint are clean.
+
+## Portal control visibility fixes
+- Use supported Tailwind `n-blue` tokens for all customer primary actions; add Submit ticket within the main list content.
+- Remove Rails' automatically inserted empty urgency option while preserving enum validation.
+- Watch custom ERB templates in `config/vite.json` so their Tailwind classes rebuild.
+- Verified actual button colors/contrast and screenshots at desktop and 390px widths; regression assertions added.
+
+## Reference ticket-page layout
+- Centered compact ticket summary, author/date timeline, bordered messages and reply form based on the customer-provided reference.
+- Dedicated customer portal Tailwind stylesheet avoids the legacy help-center reset.
+- Ownership-checked inline previews for raster images; other attachments remain downloads.
+- Desktop/390px and English/Vietnamese browser checks completed; expanded automated checks pending.
+
+## Portal email reply routing (validated locally; live activation pending)
+- Opt-in support alias and ticket-specific Reply-To headers for active portal customers.
+- Dedicated read-only Gmail polling for tagged replies, scoped to the portal inbox and customer, with bounded batches and Message-ID deduplication.
+- Reuses existing incoming-message callbacks and attachments; does not create tickets from unmatched mail.
+- Validated with 224 passing examples and clean lint. A Gmail reply was imported exactly once into preview ticket #2; repeated polling did not duplicate it.
+- Automatic polling is not enabled on the running installation.
+
+## Support notifications and follow-up (local runtime checks passed)
+- Plain-text English/Vietnamese confirmation, reply, reminder and resolution emails use the customer locale. The user requested removal of HTML alternatives for email-app compatibility.
+- Public reply context is bounded; private notes and direct blob links are excluded.
+- Opt-in delayed reminders at 48 hours and resolution 24 hours after successful reminder delivery, with cancellation checks for newer public messages.
+- Follow-up does not change global resolution settings and remains disabled until local validation and worker activation.
+- Focused notification/follow-up checks passed: 28 examples and clean lint across nine files; Gmail visual review and worker activation remain pending.
+- The later plain-text-only change passed 29 focused examples and clean lint across nine files. Automatic processing remains disabled.

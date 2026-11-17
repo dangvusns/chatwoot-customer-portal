@@ -2,6 +2,12 @@ require 'rails_helper'
 RSpec.describe MailPresenter do
   include ActionMailbox::TestHelper
 
+  it 'treats a missing Content-Type as plain text' do
+    mail = Mail.read_from_string("From: customer@example.com\r\nSubject: Reply\r\n\r\nMy customer reply")
+    expect(mail.content_type).to be_nil
+    expect(described_class.new(mail).text_content[:reply]).to eq('My customer reply')
+  end
+
   describe 'parsed mail decorator' do
     let(:mail) { create_inbound_email_from_fixture('welcome.eml').mail }
     let(:multiple_in_reply_to_mail) { create_inbound_email_from_fixture('multiple_in_reply_to.eml').mail }

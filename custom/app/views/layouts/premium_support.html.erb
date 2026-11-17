@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title><%= t('premium_support.brand') %></title>
+    <%= csrf_meta_tags %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'premium_support' %>
+  </head>
+  <body class="font-inter bg-slate-50 text-slate-900">
+    <header class="border-b border-slate-200 bg-white">
+      <nav class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-5" aria-label="<%= t('premium_support.navigation') %>">
+        <%= link_to t('premium_support.brand'), premium_support_root_path, class: 'text-lg font-semibold text-n-blue-11' %>
+        <div class="flex flex-wrap items-center gap-4">
+          <% PortalCustomer::SUPPORTED_LOCALES.each do |locale| %>
+            <%= link_to locale == 'en' ? 'English' : 'Tiếng Việt', url_for(locale: locale), lang: locale, class: 'underline' %>
+          <% end %>
+          <% if current_customer %>
+            <%= link_to t('premium_support.submit_ticket'), new_premium_support_ticket_path, class: 'rounded-lg bg-n-blue-11 hover:bg-n-blue-12 px-4 py-2 font-medium text-white' %>
+            <%= button_to t('premium_support.sign_out'), premium_support_logout_path, method: :delete, class: 'rounded border border-slate-300 px-3 py-2' %>
+          <% end %>
+        </div>
+      </nav>
+    </header>
+    <main class="mx-auto max-w-5xl px-6 py-10">
+      <% if notice.present? %><p role="status" class="mb-6 rounded-lg bg-n-teal-2 p-4 text-n-teal-12"><%= notice %></p><% end %>
+      <% if alert.present? %><p role="alert" class="mb-6 rounded-lg bg-n-ruby-2 p-4 text-n-ruby-11"><%= alert %></p><% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

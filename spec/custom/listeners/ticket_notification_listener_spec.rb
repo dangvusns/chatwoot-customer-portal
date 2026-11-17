@@ -22,6 +22,16 @@ describe TicketNotificationListener do
   end
 
   describe '#message_created' do
+    it 'schedules follow-up for an active portal customer 48 hours after a public agent reply' do
+      create(:portal_customer, :active, account: account, contact: contact)
+      message = create(:message, conversation: conversation, account: account, inbox: inbox, message_type: :outgoing)
+      clear_enqueued_jobs
+      with_modified_env(TICKET_FOLLOW_UP_ENABLED: 'true') do
+        expect { listener.message_created(message_event(message)) }
+          .to have_enqueued_job(Tickets::RemindUnansweredJob).with(message.id).at(message.created_at + 48.hours)
+      end
+    end
+
     it 'emails the customer about a public agent reply' do
       message = create(:message, conversation: conversation, account: account, inbox: inbox, message_type: :outgoing, content: 'We are on it')
 

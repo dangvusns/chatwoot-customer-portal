@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="<%= @customer.locale %>">
+  <body>
+    <h1><%= t('premium_support.brand') %></h1>
+    <p><%= t("premium_support.mailer.#{@purpose}") %></p>
+    <p><%= link_to t('premium_support.set_password'), @access_url %></p>
+    <p><%= t('premium_support.mailer.ignore') %></p>
+  </body>
+</html>

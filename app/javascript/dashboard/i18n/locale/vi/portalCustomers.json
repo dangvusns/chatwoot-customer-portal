@@ -1,0 +1,27 @@
+{
+  "PORTAL_CUSTOMERS": {
+    "TITLE": "Khách hàng cổng hỗ trợ",
+    "DESCRIPTION": "Mời khách hàng và quản lý quyền truy cập cổng hỗ trợ. Tài khoản khách hàng tách biệt với nhân viên hỗ trợ.",
+    "NAME": "Họ và tên",
+    "EMAIL": "Địa chỉ email",
+    "LANGUAGE": "Ngôn ngữ email",
+    "ENGLISH": "Tiếng Anh",
+    "VIETNAMESE": "Tiếng Việt",
+    "INVITE": "Mời khách hàng",
+    "INVITED": "Lời mời đã được đưa vào hàng đợi gửi email.",
+    "UPDATED": "Đã cập nhật quyền truy cập của khách hàng.",
+    "ERROR": "Không thể hoàn tất yêu cầu. Vui lòng kiểm tra thông tin và thử lại.",
+    "RESEND": "Gửi lại lời mời",
+    "RESET": "Gửi liên kết đặt lại mật khẩu",
+    "SUSPEND": "Tạm ngưng truy cập",
+    "REACTIVATE": "Khôi phục truy cập",
+    "EMPTY": "Không tìm thấy khách hàng.",
+    "PREVIOUS": "Trước",
+    "NEXT": "Tiếp",
+    "STATUS": {
+      "invited": "Đang chờ kích hoạt",
+      "active": "Đang hoạt động",
+      "suspended": "Đã tạm ngưng"
+    }
+  }
+}

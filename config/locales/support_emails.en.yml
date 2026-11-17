@@ -1,0 +1,22 @@
+en:
+  support_emails:
+    greeting: "Hello %{name},"
+    reply_above: Please type your reply above this line.
+    reply_options: Reply to this email or sign in to the support portal to continue the conversation.
+    portal_only: Open your ticket in the support portal to continue the conversation.
+    previous_message: Your previous message
+    attachments: Sign in to your ticket to view the attachments.
+    deadline: "Automatic resolution deadline: %{deadline}."
+    footer: This email concerns your support request with Solid&Soft Support.
+    received:
+      subject: "[Ticket #%{number}] We received your request"
+      body: "Thank you for contacting Solid&Soft Support. We received ticket #%{number} and our team will review your request."
+    agent_reply:
+      subject: "[Ticket #%{number}] New reply from support"
+      body: Our support team has replied to your request.
+    reminder:
+      subject: "[Ticket #%{number}] We're waiting for your reply"
+      body: We have not received a response to our last reply. Please let us know if you still need help. If we do not hear from you within 24 hours, we will mark this ticket complete. You can reply afterward to reopen it.
+    resolved:
+      subject: "[Ticket #%{number}] Your ticket is complete"
+      body: Your ticket has been marked complete. If you still need help, respond to reopen it.

@@ -1,0 +1,28 @@
+vi:
+  support_emails:
+    greeting: "Xin chào %{name},"
+    reply_above: Vui lòng nhập phản hồi phía trên dòng này.
+    reply_options: Trả lời email này hoặc đăng nhập cổng hỗ trợ để tiếp tục trao đổi.
+    portal_only: Mở yêu cầu trên cổng hỗ trợ để tiếp tục trao đổi.
+    previous_message: Nội dung trước đó của bạn
+    attachments: Đăng nhập và mở yêu cầu để xem tệp đính kèm.
+    deadline: "Thời điểm tự động hoàn tất: %{deadline}."
+    footer: Email này liên quan đến yêu cầu hỗ trợ của bạn tại Solid&Soft Support.
+    received:
+      subject: "[Yêu cầu #%{number}] Chúng tôi đã nhận được yêu cầu"
+      body: "Cảm ơn bạn đã liên hệ Solid&Soft Support. Chúng tôi đã nhận được yêu cầu #%{number} và sẽ kiểm tra nội dung của bạn."
+    agent_reply:
+      subject: "[Yêu cầu #%{number}] Phản hồi mới từ bộ phận hỗ trợ"
+      body: Bộ phận hỗ trợ đã phản hồi yêu cầu của bạn.
+    reminder:
+      subject: "[Yêu cầu #%{number}] Chúng tôi đang chờ phản hồi của bạn"
+      body: Chúng tôi chưa nhận được phản hồi cho câu trả lời gần nhất. Vui lòng cho biết nếu bạn vẫn cần trợ giúp. Nếu không nhận được phản hồi trong vòng 24 giờ, chúng tôi sẽ đánh dấu yêu cầu là hoàn tất. Bạn vẫn có thể trả lời sau đó để mở lại yêu cầu.
+    resolved:
+      subject: "[Yêu cầu #%{number}] Yêu cầu của bạn đã hoàn tất"
+      body: Yêu cầu của bạn đã được đánh dấu là hoàn tất. Nếu vẫn cần trợ giúp, hãy phản hồi để mở lại yêu cầu.
+  tickets:
+    show:
+      ticket: "Yêu cầu #%{number}"
+      support_team: Bộ phận hỗ trợ
+    mailer:
+      view_ticket: Xem yêu cầu của bạn

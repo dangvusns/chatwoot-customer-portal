@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_11_11_031108) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_16_042138) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -1593,6 +1593,19 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_11_031108) do
     t.datetime "updated_at", null: false
     t.string "title"
     t.string "video_url"
+  end
+
+  create_table "portal_customers", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "contact_id", null: false
+    t.string "password_digest"
+    t.string "locale", default: "en", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "session_version", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_portal_customers_on_account_id"
+    t.index ["contact_id"], name: "index_portal_customers_on_contact_id", unique: true
   end
 
   create_table "portals", force: :cascade do |t|

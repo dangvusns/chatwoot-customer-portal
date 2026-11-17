@@ -3,6 +3,11 @@
 # validations for this file exist in /spec/configs/schedule_spec.rb
 
 # Company fork: record missed SLA deadlines and close finished SLAs
+sync_portal_email_replies_job:
+  cron: '* * * * *'
+  class: 'Tickets::SyncEmailRepliesJob'
+  queue: scheduled_jobs
+
 process_applied_slas_job:
   cron: '* * * * *'
   class: 'Custom::Sla::ProcessAppliedSlasJob'

@@ -1,0 +1,71 @@
+en:
+  premium_support:
+    brand: Solid&Soft Support
+    navigation: Support navigation
+    sign_in: Sign in to your support portal
+    sign_out: Sign out
+    invitation_only: Access is available to customers invited by our team.
+    email: Email address
+    password: Password
+    password_confirmation: Confirm password
+    forgot_password: Forgot your password?
+    send_reset: Send password reset link
+    set_password: Set your password
+    save_password: Save password
+    password_hint: Use at least 12 characters. Passwords must not exceed 72 bytes.
+    invalid_login: Unable to sign in. Check your email and password or contact support.
+    reset_requested: If your account is eligible, you will receive a password reset email.
+    password_saved: Your password has been saved.
+    invalid_link: This access link is invalid or has expired.
+    my_tickets: My tickets
+    ticket_number: "Ticket #%{number}"
+    statuses:
+      open: In progress
+      pending: Waiting for your reply
+      snoozed: In progress
+      resolved: Complete
+    no_tickets: You have no support tickets yet.
+    pagination: Ticket pages
+    previous: Previous
+    next: Next
+    submit_ticket: Submit ticket
+    subject: Subject
+    product: Product
+    select_product: Select a product
+    issue_type: Issue type
+    select_issue_type: Select an issue type
+    urgency: Urgency
+    priorities:
+      low: Low
+      medium: Normal
+      high: High
+      urgent: Urgent
+    message: Message
+    attachments: Attachments (up to 5 files, 10 MB each)
+    catalog_unavailable: The product catalog is not configured. Please contact support.
+    ticket_created: Your ticket has been submitted.
+    status_updated: Your ticket status has been updated.
+    reply_sent: Your reply has been sent.
+    close_ticket: Close ticket
+    reopen_ticket: Reopen ticket
+    conversation: Conversation
+    support_team: Support team
+    message_pages: Conversation pages
+    newer_messages: Newer messages
+    older_messages: Older messages
+    reply: Reply to this ticket
+    send_reply: Send reply
+    reply_reopens: Replying will reopen this ticket.
+    ticket_not_found: Ticket not found
+    timestamp_format: '%Y-%m-%d %H:%M %Z'
+    message_date_format: '%b %-d, %Y'
+    breadcrumb: Ticket navigation
+    submitted_by: Submitter
+    date_submitted: Date submitted
+    last_updated: Last updated
+    source: Source
+    portal_source: Solid&Soft Support portal
+    mailer:
+      invitation: You are invited to Solid&Soft Support. Set your password within 48 hours.
+      password_reset: Reset your Solid&Soft Support password within 30 minutes.
+      ignore: If you did not expect this email, contact support. Do not share this link.

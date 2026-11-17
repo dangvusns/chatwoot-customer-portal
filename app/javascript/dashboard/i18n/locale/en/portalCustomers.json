@@ -1,0 +1,27 @@
+{
+  "PORTAL_CUSTOMERS": {
+    "TITLE": "Portal customers",
+    "DESCRIPTION": "Invite customers and manage their access to the support portal. Customers are separate from support agents.",
+    "NAME": "Full name",
+    "EMAIL": "Email address",
+    "LANGUAGE": "Email language",
+    "ENGLISH": "English",
+    "VIETNAMESE": "Vietnamese",
+    "INVITE": "Invite customer",
+    "INVITED": "The invitation has been queued for delivery.",
+    "UPDATED": "Customer access updated.",
+    "ERROR": "Unable to complete the request. Check the details and try again.",
+    "RESEND": "Resend invitation",
+    "RESET": "Send password reset",
+    "SUSPEND": "Suspend access",
+    "REACTIVATE": "Reactivate access",
+    "EMPTY": "No portal customers found.",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "STATUS": {
+      "invited": "Invitation pending",
+      "active": "Active",
+      "suspended": "Suspended"
+    }
+  }
+}

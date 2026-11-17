@@ -1,0 +1,28 @@
+<div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+  <div>
+    <h1 class="mb-2 text-3xl font-semibold"><%= t('premium_support.my_tickets') %></h1>
+    <p class="text-slate-600"><%= current_customer.contact.name %> (<%= current_customer.contact.email %>)</p>
+  </div>
+  <%= link_to t('premium_support.submit_ticket'), new_premium_support_ticket_path, class: 'inline-flex min-h-11 items-center justify-center rounded-lg bg-n-blue-11 px-5 py-3 font-medium text-white hover:bg-n-blue-12' %>
+</div>
+<section class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+  <% if @conversations.empty? %>
+    <p class="p-8 text-slate-600"><%= t('premium_support.no_tickets') %></p>
+  <% else %>
+    <ul class="divide-y divide-slate-200">
+      <% @conversations.each do |conversation| %>
+        <li class="flex flex-wrap items-center justify-between gap-3 p-5">
+          <div>
+            <%= link_to t('premium_support.ticket_number', number: conversation.display_id), premium_support_ticket_path(conversation.display_id), class: 'font-medium text-n-blue-11 underline' %>
+            <p class="mt-1 text-slate-600"><%= conversation.additional_attributes['mail_subject'] %></p>
+          </div>
+          <span class="rounded-full bg-slate-100 px-3 py-1 text-sm"><%= t("premium_support.statuses.#{conversation.status}") %></span>
+        </li>
+      <% end %>
+    </ul>
+    <nav class="flex justify-between border-t border-slate-200 p-5" aria-label="<%= t('premium_support.pagination') %>">
+      <% unless @conversations.first_page? %><%= link_to t('premium_support.previous'), premium_support_root_path(page: @conversations.prev_page), class: 'text-n-blue-11 underline' %><% end %>
+      <% unless @conversations.last_page? %><%= link_to t('premium_support.next'), premium_support_root_path(page: @conversations.next_page), class: 'text-n-blue-11 underline' %><% end %>
+    </nav>
+  <% end %>
+</section>

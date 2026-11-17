@@ -1,0 +1,27 @@
+<% if @reply_by_email %><%= t('support_emails.reply_above') %>
+----------------------------------------
+<% end %>
+<%= t('premium_support.brand') %>
+<%= t('tickets.show.ticket', number: @conversation.display_id) %><% if @title.present? %>: <%= @title %><% end %>
+
+<%= t('support_emails.greeting', name: @contact.name.presence || @contact.email) %>
+
+<%= t("support_emails.#{@kind}.body", number: @conversation.display_id) %>
+<% if @deadline %>
+<%= t('support_emails.deadline', deadline: @deadline.utc.strftime('%Y-%m-%d %H:%M UTC')) %>
+<% end %>
+<% if @message %>
+<%= @message.sender&.name.presence || t('tickets.show.support_team') %> · <%= @message.created_at.utc.strftime('%Y-%m-%d %H:%M UTC') %>
+<%= @message.content %>
+<% if @message.attachments.any? %><%= t('support_emails.attachments') %><% end %>
+<% end %>
+<% if @context %>
+<%= t('support_emails.previous_message') %>
+<%= @context.content.to_s.truncate(2000) %>
+<% end %>
+
+<%= t('tickets.mailer.view_ticket') %>: <%= @ticket_url %>
+
+<%= t(@reply_by_email ? 'support_emails.reply_options' : 'support_emails.portal_only') %>
+
+<%= t('support_emails.footer') %>

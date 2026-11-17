@@ -7,15 +7,23 @@ class Tickets::Submission
   attribute :email, :string
   attribute :issue_type, :string
   attribute :message, :string
+  attribute :subject, :string
+  attribute :product, :string
+  attribute :priority, :string, default: 'medium'
   # Honeypot: hidden from people, filled in by bots
   attribute :website, :string
 
   attr_reader :conversation
+  attr_accessor :portal_customer
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :message, presence: true, length: { maximum: Tickets::Portal::MAX_CONTENT_LENGTH }
   validate :issue_type_is_allowed
+  validates :subject, presence: true, length: { maximum: 255 }, if: :portal_customer
+  validates :product, inclusion: { in: ->(_) { Tickets::Portal.products } }, if: :portal_customer
+  validates :priority, inclusion: { in: Conversation.priorities.keys }, if: :portal_customer
+  validate :customer_can_submit, if: :portal_customer
 
   def spam?
     website.present?
@@ -26,6 +34,9 @@ class Tickets::Submission
 
     @conversation = ActiveRecord::Base.transaction { create_conversation_with_message }
     true
+  rescue ActiveRecord::RecordInvalid => e
+    errors.add(:base, e.record.errors.full_messages.join(', '))
+    false
   end
 
   private
@@ -39,16 +50,37 @@ class Tickets::Submission
 
   def create_conversation_with_message
     inbox = Tickets::Portal.inbox
-    contact_inbox = ContactInboxWithContactBuilder.new(inbox: inbox, contact_attributes: { name: name, email: email }).perform
-    conversation = Conversation.create!(
+    contact_inbox = build_contact_inbox(inbox)
+    attributes = {
       account_id: inbox.account_id,
       inbox_id: inbox.id,
       contact_id: contact_inbox.contact_id,
       contact_inbox_id: contact_inbox.id,
       custom_attributes: issue_type.present? ? { Tickets::Portal::ISSUE_TYPE_KEY => issue_type } : {},
       additional_attributes: { source: Tickets::Portal::SOURCE }
-    )
+    }
+    attributes.merge!(portal_attributes) if portal_customer
+    conversation = Conversation.create!(attributes)
     Tickets::Portal.post_customer_message(conversation, content: message, attachments: attachments)
     conversation
+  end
+
+  def build_contact_inbox(inbox)
+    return ContactInboxWithContactBuilder.new(inbox: inbox, contact_attributes: { name: name, email: email }).perform unless portal_customer
+
+    portal_customer.contact.contact_inboxes.find_by(inbox: inbox) ||
+      ContactInboxBuilder.new(contact: portal_customer.contact, inbox: inbox, source_id: nil).perform
+  end
+
+  def portal_attributes
+    { priority: priority,
+      custom_attributes: { Tickets::Portal::ISSUE_TYPE_KEY => issue_type, Tickets::Portal::PRODUCT_KEY => product },
+      additional_attributes: { source: Tickets::Portal::SOURCE, mail_subject: subject } }
+  end
+
+  def customer_can_submit
+    return if portal_customer.active? && portal_customer.account_id == Tickets::Portal.inbox.account_id
+
+    errors.add(:base, :invalid)
   end
 end

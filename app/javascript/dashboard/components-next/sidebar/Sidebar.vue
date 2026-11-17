@@ -961,6 +961,12 @@ const menuItems = computed(() => {
           to: accountScopedRoute('custom_roles_list'),
         },
         {
+          name: 'Settings Portal Customers',
+          label: t('PORTAL_CUSTOMERS.TITLE'),
+          icon: 'i-lucide-users',
+          to: accountScopedRoute('portal_customers_index'),
+        },
+        {
           name: 'Settings Sla',
           label: t('SIDEBAR.SLA'),
           icon: 'i-lucide-clock-alert',

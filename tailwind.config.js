@@ -25,6 +25,7 @@ const tailwindConfig = {
   darkMode: 'class',
   presets: [jumpbar],
   content: [
+    './custom/app/views/**/*.erb',
     './enterprise/app/views/**/*.erb',
     './app/javascript/widget/**/*.vue',
     './app/javascript/v3/**/*.vue',

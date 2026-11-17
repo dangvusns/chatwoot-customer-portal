@@ -215,7 +215,7 @@ class MailPresenter < SimpleDelegator
   end
 
   def text_mail_body?
-    ((mail.content_type || '').include? 'text/plain') || @mail.text_part&.content_type&.include?('text/plain')
+    ((mail.content_type || 'text/plain').include? 'text/plain') || @mail.text_part&.content_type&.include?('text/plain')
   end
 
   def multipart_mail_body?

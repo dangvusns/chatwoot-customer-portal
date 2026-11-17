@@ -5,6 +5,7 @@ class TicketNotificationListener < BaseListener
 
     conversation = message.conversation
     TicketMailer.with(account: conversation.account).agent_reply(message).deliver_later
+    schedule_follow_up(message)
   end
 
   def conversation_status_changed(event)
@@ -15,6 +16,15 @@ class TicketNotificationListener < BaseListener
   end
 
   private
+
+  def schedule_follow_up(message)
+    return unless Tickets::FollowUp.enabled? && message.sender_type == 'User'
+
+    conversation = message.conversation
+    return unless PortalCustomer.active.exists?(account_id: conversation.account_id, contact_id: conversation.contact_id)
+
+    Tickets::RemindUnansweredJob.set(wait_until: message.created_at + Tickets::FollowUp::REMIND_AFTER).perform_later(message.id)
+  end
 
   def customer_visible_agent_message?(message)
     message.outgoing? && !message.private? && notifiable_conversation?(message.conversation)

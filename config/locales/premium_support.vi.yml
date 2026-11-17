@@ -1,0 +1,110 @@
+vi:
+  activemodel:
+    attributes:
+      tickets/submission:
+        subject: Tiêu đề
+        product: Sản phẩm
+        priority: Mức độ khẩn cấp
+        issue_type: Loại yêu cầu
+        message: Nội dung
+        attachments: Tệp đính kèm
+      tickets/reply:
+        content: Nội dung
+        attachments: Tệp đính kèm
+    errors:
+      models:
+        tickets/submission:
+          attributes:
+            subject:
+              blank: không được để trống
+              too_long: không được vượt quá %{count} ký tự
+            product:
+              inclusion: không có trong danh mục sản phẩm
+            priority:
+              inclusion: không hợp lệ
+            issue_type:
+              inclusion: không hợp lệ
+            message:
+              blank: không được để trống
+              too_long: không được vượt quá %{count} ký tự
+            attachments:
+              too_many: chỉ cho phép tối đa %{count} tệp
+              too_large: có tệp vượt quá 10 MB
+        tickets/reply:
+          attributes:
+            content:
+              blank: không được để trống
+              too_long: không được vượt quá %{count} ký tự
+            attachments:
+              too_many: chỉ cho phép tối đa %{count} tệp
+              too_large: có tệp vượt quá 10 MB
+  premium_support:
+    brand: Solid&Soft Support
+    navigation: Điều hướng hỗ trợ
+    sign_in: Đăng nhập cổng hỗ trợ
+    sign_out: Đăng xuất
+    invitation_only: Cổng hỗ trợ dành cho khách hàng được đội ngũ của chúng tôi mời.
+    email: Địa chỉ email
+    password: Mật khẩu
+    password_confirmation: Xác nhận mật khẩu
+    forgot_password: Quên mật khẩu?
+    send_reset: Gửi liên kết đặt lại mật khẩu
+    set_password: Thiết lập mật khẩu
+    save_password: Lưu mật khẩu
+    password_hint: Sử dụng ít nhất 12 ký tự. Mật khẩu không được vượt quá 72 byte.
+    invalid_login: Không thể đăng nhập. Vui lòng kiểm tra email và mật khẩu hoặc liên hệ hỗ trợ.
+    reset_requested: Nếu tài khoản đủ điều kiện, bạn sẽ nhận được email đặt lại mật khẩu.
+    password_saved: Mật khẩu của bạn đã được lưu.
+    invalid_link: Liên kết này không hợp lệ hoặc đã hết hạn.
+    my_tickets: Phiếu hỗ trợ của tôi
+    ticket_number: "Phiếu hỗ trợ #%{number}"
+    statuses:
+      open: Đang xử lý
+      pending: Đang chờ phản hồi của bạn
+      snoozed: Đang xử lý
+      resolved: Đã hoàn tất
+    no_tickets: Bạn chưa có phiếu hỗ trợ nào.
+    pagination: Các trang phiếu hỗ trợ
+    previous: Trước
+    next: Tiếp
+    submit_ticket: Gửi phiếu hỗ trợ
+    subject: Tiêu đề
+    product: Sản phẩm
+    select_product: Chọn sản phẩm
+    issue_type: Loại yêu cầu
+    select_issue_type: Chọn loại yêu cầu
+    urgency: Mức độ khẩn cấp
+    priorities:
+      low: Thấp
+      medium: Bình thường
+      high: Cao
+      urgent: Khẩn cấp
+    message: Nội dung
+    attachments: Tệp đính kèm (tối đa 5 tệp, mỗi tệp 10 MB)
+    catalog_unavailable: Danh mục sản phẩm chưa được thiết lập. Vui lòng liên hệ hỗ trợ.
+    ticket_created: Phiếu hỗ trợ của bạn đã được gửi.
+    status_updated: Trạng thái phiếu hỗ trợ đã được cập nhật.
+    reply_sent: Phản hồi của bạn đã được gửi.
+    close_ticket: Đóng phiếu hỗ trợ
+    reopen_ticket: Mở lại phiếu hỗ trợ
+    conversation: Trao đổi
+    support_team: Đội ngũ hỗ trợ
+    message_pages: Các trang trao đổi
+    newer_messages: Tin nhắn mới hơn
+    older_messages: Tin nhắn cũ hơn
+    reply: Phản hồi phiếu hỗ trợ
+    send_reply: Gửi phản hồi
+    reply_reopens: Phản hồi sẽ mở lại phiếu hỗ trợ này.
+    ticket_not_found: Không tìm thấy phiếu hỗ trợ
+    timestamp_format: '%d/%m/%Y %H:%M %Z'
+    message_date_format: '%d/%m/%Y'
+    breadcrumb: Điều hướng phiếu hỗ trợ
+    submitted_by: Người gửi
+    date_submitted: Ngày gửi
+    last_updated: Cập nhật lần cuối
+    source: Nguồn
+    portal_source: Cổng hỗ trợ Solid&Soft
+    mailer:
+      invitation: Bạn được mời sử dụng Solid&Soft Support. Vui lòng thiết lập mật khẩu trong vòng 48 giờ.
+      password_reset: Đặt lại mật khẩu Solid&Soft Support trong vòng 30 phút.
+      ignore: Nếu bạn không mong đợi email này, hãy liên hệ hỗ trợ. Không chia sẻ liên kết này.

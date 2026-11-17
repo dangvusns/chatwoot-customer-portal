@@ -1,0 +1,27 @@
+<%= link_to t('premium_support.my_tickets'), premium_support_root_path, class: 'text-n-blue-11 underline' %>
+<h1 class="mb-2 mt-6 text-3xl font-semibold"><%= t('premium_support.submit_ticket') %></h1>
+<p class="mb-8 text-slate-600"><%= current_customer.contact.name %> (<%= current_customer.contact.email %>)</p>
+<section class="rounded-xl border border-slate-200 bg-white p-6">
+  <%= render 'premium_support/tickets/errors', record: @submission %>
+  <% products = Tickets::Portal.products %>
+  <% if products.empty? %><p role="alert" class="mb-6 text-n-ruby-11"><%= t('premium_support.catalog_unavailable') %></p><% end %>
+  <%= form_with model: @submission, url: premium_support_tickets_path, local: true do |form| %>
+    <%= form.label :subject, t('premium_support.subject'), class: 'mb-2 block font-medium' %>
+    <%= form.text_field :subject, required: true, maxlength: 255, class: 'mb-5 w-full rounded-lg border border-slate-300 p-3' %>
+    <%= form.label :product, t('premium_support.product'), class: 'mb-2 block font-medium' %>
+    <%= form.select :product, products, { prompt: t('premium_support.select_product') }, required: true, class: 'mb-5 w-full rounded-lg border border-slate-300 p-3' %>
+    <% issue_types = Tickets::Portal.issue_types %>
+    <% if issue_types.any? %>
+      <%= form.label :issue_type, t('premium_support.issue_type'), class: 'mb-2 block font-medium' %>
+      <%= form.select :issue_type, issue_types, { prompt: t('premium_support.select_issue_type') }, required: true, class: 'mb-5 w-full rounded-lg border border-slate-300 p-3' %>
+    <% end %>
+    <%= form.label :priority, t('premium_support.urgency'), class: 'mb-2 block font-medium' %>
+    <%# All four options are valid; marking this select required makes Rails insert an empty option. %>
+    <%= form.select :priority, Conversation.priorities.keys.map { |priority| [t("premium_support.priorities.#{priority}"), priority] }, { include_blank: false }, class: 'mb-5 w-full rounded-lg border border-slate-300 p-3' %>
+    <%= form.label :message, t('premium_support.message'), class: 'mb-2 block font-medium' %>
+    <%= form.text_area :message, required: true, rows: 8, maxlength: Tickets::Portal::MAX_CONTENT_LENGTH, class: 'mb-5 w-full rounded-lg border border-slate-300 p-3' %>
+    <%= form.label :attachments, t('premium_support.attachments'), class: 'mb-2 block font-medium' %>
+    <%= form.file_field :attachments, multiple: true, class: 'mb-6 block w-full' %>
+    <%= form.submit t('premium_support.submit_ticket'), disabled: products.empty?, class: 'cursor-pointer rounded-lg bg-n-blue-11 hover:bg-n-blue-12 px-5 py-3 font-medium text-white disabled:opacity-50' %>
+  <% end %>
+</section>
