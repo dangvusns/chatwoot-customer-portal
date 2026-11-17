@@ -20,9 +20,6 @@ class TicketNotificationListener < BaseListener
   def schedule_follow_up(message)
     return unless Tickets::FollowUp.enabled? && message.sender_type == 'User'
 
-    conversation = message.conversation
-    return unless PortalCustomer.active.exists?(account_id: conversation.account_id, contact_id: conversation.contact_id)
-
     Tickets::RemindUnansweredJob.set(wait_until: message.created_at + Tickets::FollowUp::REMIND_AFTER).perform_later(message.id)
   end
 
@@ -31,6 +28,8 @@ class TicketNotificationListener < BaseListener
   end
 
   def notifiable_conversation?(conversation)
-    Tickets::Portal.ticket_inbox?(conversation) && conversation.contact.email.present?
+    return false unless Tickets::Portal.ticket_inbox?(conversation) && conversation.contact.email.present?
+
+    PortalCustomer.active.exists?(account_id: conversation.account_id, contact_id: conversation.contact_id)
   end
 end

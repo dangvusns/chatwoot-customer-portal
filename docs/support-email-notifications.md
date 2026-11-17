@@ -119,7 +119,7 @@ Private messages are rejected even on direct mailer calls; attachments remain be
 the authenticated portal instead of exposing Active Storage URLs.
 The new gated routing path adds the support From alias and ticket-specific Reply-To
 for active portal customers. Agent replies use Message-ID, In-Reply-To and References.
-Guest notifications and disabled routing retain their previous behavior.
+Contacts who are not active portal customers receive no ticket notifications, reminders or auto-resolve; disabled routing keeps the plain notification behavior.
 The ticket portal uses an API inbox.
 The existing IMAP processor is separate from the Action Mailbox conversation finder;
 changing only one does not connect Google Workspace ingestion. Reuse the existing mail

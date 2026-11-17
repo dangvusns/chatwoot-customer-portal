@@ -8,6 +8,7 @@ describe TicketNotificationListener do
   let(:contact) { create(:contact, account: account, email: 'vu@example.com') }
   let(:contact_inbox) { create(:contact_inbox, inbox: inbox, contact: contact) }
   let(:conversation) { create(:conversation, account: account, inbox: inbox, contact: contact, contact_inbox: contact_inbox) }
+  let!(:portal_customer) { create(:portal_customer, :active, account: account, contact: contact) }
 
   around do |example|
     with_modified_env(TICKET_PORTAL_INBOX_ID: inbox.id.to_s, FRONTEND_URL: 'http://www.example.com') { example.run }
@@ -23,7 +24,6 @@ describe TicketNotificationListener do
 
   describe '#message_created' do
     it 'schedules follow-up for an active portal customer 48 hours after a public agent reply' do
-      create(:portal_customer, :active, account: account, contact: contact)
       message = create(:message, conversation: conversation, account: account, inbox: inbox, message_type: :outgoing)
       clear_enqueued_jobs
       with_modified_env(TICKET_FOLLOW_UP_ENABLED: 'true') do
@@ -36,6 +36,16 @@ describe TicketNotificationListener do
       message = create(:message, conversation: conversation, account: account, inbox: inbox, message_type: :outgoing, content: 'We are on it')
 
       expect { listener.message_created(message_event(message)) }.to have_enqueued_mail(TicketMailer, :agent_reply)
+    end
+
+    it 'does not email or follow up a contact who is not an active portal customer' do
+      portal_customer.update!(status: :suspended)
+      message = create(:message, conversation: conversation, account: account, inbox: inbox, message_type: :outgoing, content: 'We are on it')
+
+      with_modified_env(TICKET_FOLLOW_UP_ENABLED: 'true') do
+        expect { listener.message_created(message_event(message)) }.not_to have_enqueued_mail(TicketMailer, :agent_reply)
+        expect { listener.message_created(message_event(message)) }.not_to have_enqueued_job(Tickets::RemindUnansweredJob)
+      end
     end
 
     it 'ignores private notes' do
@@ -71,6 +81,13 @@ describe TicketNotificationListener do
       conversation.resolved!
 
       expect { listener.conversation_status_changed(status_event(conversation)) }.to have_enqueued_mail(TicketMailer, :resolved)
+    end
+
+    it 'does not email a contact who is not an active portal customer when resolved' do
+      portal_customer.update!(status: :suspended)
+      conversation.resolved!
+
+      expect { listener.conversation_status_changed(status_event(conversation)) }.not_to have_enqueued_mail(TicketMailer, :resolved)
     end
 
     it 'does not email for other status changes' do

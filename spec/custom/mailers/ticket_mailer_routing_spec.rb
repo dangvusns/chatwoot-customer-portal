@@ -28,7 +28,7 @@ RSpec.describe TicketMailer, type: :mailer do
     expect(Array(mail.references)).to eq([incoming.source_id])
   end
 
-  it 'leaves existing guest notifications unchanged' do
+  it 'does not apply reply routing without a portal customer' do
     customer.destroy!
     mail = described_class.with(account: account).received(conversation)
     expect(mail.reply_to).to be_nil

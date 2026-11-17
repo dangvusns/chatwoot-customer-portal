@@ -46,9 +46,9 @@ require its administrator role. Invitation emails go to the linked contact addre
 The current local implementation adds `/premium-support` authentication, a paginated
 customer-scoped ticket list, submission, public conversation history, replies,
 close/reopen actions, and authenticated attachment downloads, plus Settings → Portal
-customers. Profile editing, list search/filters, final branding, inbound mail and
-legacy link restrictions remain subsequent work. Existing `/support` and signed-ticket
-routes remain unchanged until migration is implemented.
+customers. Profile editing, list search/filters and final branding remain subsequent
+work. The legacy `/support` form and signed-ticket routes were removed: customers are
+invited by the team, verify their email, then sign in to submit tickets.
 
 The product catalog reuses the administrator-only Custom Attributes settings:
 create a Conversation List attribute with key `support_product` and the full catalog

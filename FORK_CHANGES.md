@@ -61,7 +61,7 @@ when running `git merge upstream/<tag>`.
 
 ## Ticket portal (Phase 1)
 - Needs env `TICKET_PORTAL_INBOX_ID` (printed by `rails tickets:setup`) and `FRONTEND_URL`; SMTP for emails.
-- Pages: `/support` (form), `/tickets/:token` (ticket page + reply). Links use signed ids valid 180 days.
+- The anonymous `/support` form and `/tickets/:token` signed-link pages were removed; customers use the invite-only `/premium-support` portal.
 
 ## Decisions
 - `ChatwootApp.enterprise?` stays false (true would activate gated routes for calls, SAML, captain).
@@ -79,7 +79,7 @@ when running `git merge upstream/<tag>`.
 - Submit-ticket button/form, customer-bound identity, full-catalog product selection, subject and native urgency.
 - Own-ticket detail/history, replies, close/reopen and authenticated public attachment streaming.
 - Reuses the existing `Tickets::Submission`, `Tickets::Reply`, conversation/message builders and Custom Attributes product catalog.
-- Registered customers' notification links point to authenticated ticket pages; legacy guest routes remain until migration.
+- Notification links point to authenticated ticket pages. Only active invited portal customers receive ticket emails, reminders and auto-resolve; the legacy guest routes were removed.
 - Regression suite: `spec/custom/requests/premium_support_tickets_spec.rb`; all 165 custom examples pass; Ruby lint (23 files) and frontend lint are clean.
 
 ## Portal control visibility fixes

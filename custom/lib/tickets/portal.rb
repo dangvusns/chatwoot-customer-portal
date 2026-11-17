@@ -1,6 +1,4 @@
 module Tickets::Portal
-  TOKEN_PURPOSE = :ticket_portal
-  TOKEN_TTL = 180.days
   ISSUE_TYPE_KEY = 'issue_type'.freeze
   PRODUCT_KEY = 'support_product'.freeze
   SOURCE = 'support_portal'.freeze
@@ -35,24 +33,8 @@ module Tickets::Portal
     definition&.attribute_values || []
   end
 
-  def token_for(conversation)
-    conversation.signed_id(purpose: TOKEN_PURPOSE, expires_in: TOKEN_TTL)
-  end
-
-  def find_conversation!(token)
-    # find_signed returns nil for a tampered, expired or wrong-purpose token (find_signed! raises InvalidSignature)
-    conversation = Conversation.find_signed(token, purpose: TOKEN_PURPOSE)
-    raise ActiveRecord::RecordNotFound unless conversation && ticket_inbox?(conversation)
-
-    conversation
-  end
-
   def url_for(conversation)
-    if PortalCustomer.exists?(contact_id: conversation.contact_id, account_id: conversation.account_id)
-      return Rails.application.routes.url_helpers.premium_support_ticket_url(conversation.display_id, host: ENV.fetch('FRONTEND_URL'))
-    end
-
-    Rails.application.routes.url_helpers.ticket_url(token_for(conversation), host: ENV.fetch('FRONTEND_URL'))
+    Rails.application.routes.url_helpers.premium_support_ticket_url(conversation.display_id, host: ENV.fetch('FRONTEND_URL'))
   end
 
   def post_customer_message(conversation, content:, attachments:)

@@ -12,7 +12,7 @@ class PremiumSupport::TicketsController < PremiumSupport::BaseController
 
   def create
     @submission = Tickets::Submission.new(submission_params)
-    @submission.assign_attributes(name: current_customer.contact.name, email: current_customer.contact.email, portal_customer: current_customer)
+    @submission.portal_customer = current_customer
     if @submission.save
       conversation = @submission.conversation
       TicketMailer.with(account: conversation.account).received(conversation).deliver_later
