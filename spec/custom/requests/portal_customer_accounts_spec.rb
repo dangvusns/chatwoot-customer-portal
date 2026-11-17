@@ -39,6 +39,7 @@ RSpec.describe 'Premium support customer authentication', type: :request do
     expect(response.body).to include("Ticket ##{own.display_id}<")
     expect(response.body).not_to include("Ticket ##{other.display_id}<")
     expect(response.headers['Cache-Control']).to include('no-store')
+    expect(response.headers['Referrer-Policy']).to eq('same-origin')
   end
 
   it 'rejects invited, suspended, and unknown accounts without distinguishing them' do

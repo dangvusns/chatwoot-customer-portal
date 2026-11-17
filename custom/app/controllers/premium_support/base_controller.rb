@@ -41,7 +41,8 @@ class PremiumSupport::BaseController < ActionController::Base # rubocop:disable 
 
   def prevent_caching
     response.headers['Cache-Control'] = 'no-store'
-    response.headers['Referrer-Policy'] = 'no-referrer'
+    # 'no-referrer' makes browsers send "Origin: null" on form posts, which Rails rejects as forged (422).
+    response.headers['Referrer-Policy'] = 'same-origin'
   end
 
   def start_customer_session(customer)
