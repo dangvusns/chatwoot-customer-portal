@@ -102,7 +102,7 @@ Everything is configured through `.env` (copy of `.env.local.example`). **Do not
 
 ### 5.1 Email, local testing (default, no credentials)
 
-`.env.local.example` already points SMTP at the Mailpit container (`SMTP_ADDRESS=mailpit`, port 1025). Every email the portal sends shows up at http://localhost:8025: invitations, ticket confirmations, agent replies, reminders.
+`.env.local.example` already points SMTP at the Mailpit container (`SMTP_ADDRESS=mailpit`, port 1025). Keep `SMTP_USERNAME`, `SMTP_PASSWORD` and `SMTP_AUTHENTICATION` commented out or absent: even an empty value makes Rails attempt a login, which Mailpit rejects (`502 Command not implemented`) and no mail is sent. Every email the portal sends shows up at http://localhost:8025: invitations, ticket confirmations, agent replies, reminders.
 
 ### 5.2 Email, real sending (Google Workspace / Gmail)
 
