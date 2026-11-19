@@ -27,7 +27,8 @@ You do **not** need Ruby, Node or PostgreSQL on Windows. Everything runs in cont
 
 ```powershell
 # 1. Get the code (history is large, ~300 MB; the first clone takes a while)
-git clone <REPO_URL> chatwoot-portal
+# (private repo: you must be added as a collaborator; Git Credential Manager will prompt you to sign in)
+git clone https://github.com/dangvusns/chatwoot-customer-portal.git chatwoot-portal
 cd chatwoot-portal
 
 # 2. Create your local config
