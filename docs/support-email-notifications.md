@@ -3,7 +3,7 @@
 ## Confirmed requirements
 
 - Adapt the customer's Dropbox reference to Solid&Soft Support, in English and Vietnamese.
-- Mailbox: `support@solidnsoft.vn` on Google Workspace.
+- Mailbox: `support@example.com` on Google Workspace.
 - Separate the public sender address from a ticket-specific Reply-To address.
 - Customers can reply through the portal or email; email updates existing tickets only.
 - Remind after 48 hours without a customer response; resolve 24 hours after the reminder if still unanswered.
@@ -13,13 +13,13 @@
 
 ## Real email setup and agent identities
 
-The main company domain is `solidnsoft.com`; its mail hosting supports POP3 but not
+The main company domain is `example.com`; its mail hosting supports POP3 but not
 IMAP. Agents use their individual `.com` addresses to sign in to the Chatwoot agent
 dashboard. This is their application identity and does not require Chatwoot to read
 their personal mailboxes.
 
-`support@solidnsoft.vn` is an alias of another Google Workspace account, not a
-separate login or mailbox. Its owning account is `dangvu@solidnsoft.vn`, confirmed
+`support@example.com` is an alias of another Google Workspace account, not a
+separate login or mailbox. Its owning account is `owner@example.com`, confirmed
 by the user. Authenticate SMTP and IMAP using that owning account.
 The user confirmed that its app password is already saved in the project-root
 `.env`; do not duplicate it in documentation, source files, or diagnostic output.
@@ -35,9 +35,9 @@ Agent login addresses are not automatically used as the notification From addres
 
 The expected flow after inbound integration is enabled:
 
-1. An agent signs in as their `@solidnsoft.com` account and writes a public reply in Chatwoot.
-2. The support notification goes from `support@solidnsoft.vn` to the customer.
-3. The customer's email client replies to a ticket-tagged address under `support@solidnsoft.vn`.
+1. An agent signs in as their `@example.com` account and writes a public reply in Chatwoot.
+2. The support notification goes from `support@example.com` to the customer.
+3. The customer's email client replies to a ticket-tagged address under `support@example.com`.
 4. The Google Workspace receiving integration validates and appends the reply to the same Chatwoot ticket.
 5. Agents continue handling it in the dashboard, without connecting their individual POP3 mailboxes.
 
@@ -50,8 +50,8 @@ POP3 email clients; they reply inside the Chatwoot dashboard.
 Example only; the exact token encoding is an implementation detail:
 
 ```
-From: Solid&Soft Support <support@solidnsoft.vn>
-Reply-To: Solid&Soft Support <support+ticket-<opaque-thread-token>@solidnsoft.vn>
+From: Solid&Soft Support <support@example.com>
+Reply-To: Solid&Soft Support <support+ticket-<opaque-thread-token>@example.com>
 ```
 
 The Reply-To token identifies the ticket thread, not an agent mailbox. Google Workspace
@@ -69,10 +69,10 @@ Because the owning mailbox may also contain unrelated mail, inbound integration 
 select only support-addressed messages and must not import the owner's other email.
 Delivery to a tagged support alias needs a real round-trip check; successful IMAP
 authentication alone does not prove alias routing works. The user agreed to testing
-and supplied `ledangvu96@gmail.com` as the test recipient, replacing the earlier
-recipient `dangvu@solidnsoft.vn`. Use this separate Gmail mailbox for the
+and supplied `tester@example.com` as the test recipient, replacing the earlier
+recipient `owner@example.com`. Use this separate Gmail mailbox for the
 customer-to-support reply-routing test. The authentication account remains
-`dangvu@solidnsoft.vn`.
+`owner@example.com`.
 
 ## Notification content
 
@@ -89,10 +89,10 @@ customer-to-support reply-routing test. The authentication account remains
 1. Run `bash chatwoot-customer-portal/.codex/check-support-email.sh` from the outer
    Docker project directory. It uses the saved primary-account credentials, checks
    IMAP authentication without selecting or reading a mailbox, and submits one test
-   email from the support alias to `ledangvu96@gmail.com`. It does not boot Rails,
+   email from the support alias to `tester@example.com`. It does not boot Rails,
    alter the running services, or access the application database.
 2. Inspect the delivered message's From and Reply-To headers, then reply to it.
-   Confirm that this tagged reply reaches `dangvu@solidnsoft.vn`. This proves provider
+   Confirm that this tagged reply reaches `owner@example.com`. This proves provider
    delivery only; the diagnostic address is not linked to an application ticket.
 3. Implement the ticket-specific receiving path, then send a notification for a local
    test ticket. Reply from the separate Gmail recipient and verify the original ticket
@@ -102,9 +102,9 @@ customer-to-support reply-routing test. The authentication account remains
 
 The user executed the diagnostic helper on 2026-11-16. IMAP authentication passed
 without reading messages, and Gmail SMTP accepted the test addressed to
-`ledangvu96@gmail.com`. Its expected Reply-To was
-`support+check-2f696d6ea79be751@solidnsoft.vn`. The user confirmed receiving the
-test in Gmail and that replying delivered the response to `dangvu@solidnsoft.vn`.
+`tester@example.com`. Its expected Reply-To was
+`support+check-2f696d6ea79be751@example.com`. The user confirmed receiving the
+test in Gmail and that replying delivered the response to `owner@example.com`.
 This establishes tagged alias reply delivery; explicit inspection of the delivered
 From header was not reported. Each invocation sends one test email.
 
@@ -132,7 +132,7 @@ the calling job. A failed reminder must not begin its closing countdown.
 
 ## Receiving implementation awaiting validation
 
-- `TICKET_EMAIL_REPLIES_ENABLED=true` and `TICKET_SUPPORT_EMAIL=support@solidnsoft.vn`
+- `TICKET_EMAIL_REPLIES_ENABLED=true` and `TICKET_SUPPORT_EMAIL=support@example.com`
   opt in. These variables have not been enabled on the running installation.
 - The dedicated sync job runs once per minute when enabled, using the saved SMTP
   primary-account credentials for Gmail IMAP. It examines INBOX read-only and fetches
@@ -178,7 +178,7 @@ mail remains disabled. Reply using the displayed text, then run the helper with
 `fetch`; it imports tagged replies and asserts one imported response and no duplicate
 after repeated polling. This manual helper does not enable polling in the running
 production or preview server. On 2026-11-16, the user received the notification at
-`ledangvu96@gmail.com` and replied with `Local reply check 1931e5f5`. The fetch helper
+`tester@example.com` and replied with `Local reply check 1931e5f5`. The fetch helper
 reported `{imported: 1}` and passed the single-import/repeated-poll assertions for
 preview ticket #2 (conversation ID 3, account ID 3). Agent view:
 `http://localhost:3101/app/accounts/3/conversations/2`. The helper initially printed

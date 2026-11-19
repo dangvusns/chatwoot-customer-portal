@@ -1,0 +1,86 @@
+# Local stack for development and demos: builds the image from this checkout.
+# `.env` sets COMPOSE_FILE to this file, so plain `docker compose ...` commands use it (see README).
+# Everything binds to 127.0.0.1 only.
+name: chatwoot-portal
+
+x-app: &app
+  image: chatwoot-company:local
+  env_file: .env
+  volumes:
+    - storage_data:/app/storage
+  environment:
+    NODE_ENV: production
+    RAILS_ENV: production
+    INSTALLATION_ENV: docker
+
+services:
+  rails:
+    <<: *app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - '127.0.0.1:3000:3000'
+    entrypoint: docker/entrypoints/rails.sh
+    command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
+    restart: unless-stopped
+
+  sidekiq:
+    <<: *app
+    depends_on:
+      - postgres
+      - redis
+    command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
+    restart: unless-stopped
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: chatwoot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    env_file: .env
+    command: ['sh', '-c', 'redis-server --requirepass "$$REDIS_PASSWORD"']
+    volumes:
+      - redis_data:/data
+
+  # Catches every outgoing email so you can test without real SMTP credentials. UI: http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:8025:8025'
+
+  # Spec runner. Not started by `up`; run it with `--profile test` (see README).
+  portal_test:
+    profiles: ['test']
+    build:
+      context: .
+      dockerfile: docker/portal-test.Dockerfile
+      args:
+        BASE_IMAGE: chatwoot-company:local
+    env_file: .env
+    environment:
+      RAILS_ENV: test
+      NODE_ENV: test
+      BUNDLE_WITHOUT: ''
+      POSTGRES_DATABASE: chatwoot_portal_test
+      REDIS_URL: redis://redis:6379/14
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  storage_data:
+  postgres_data:
+  redis_data:

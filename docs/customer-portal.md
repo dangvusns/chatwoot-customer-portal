@@ -3,7 +3,7 @@
 ## Agreed scope
 
 Build and verify locally at `/premium-support` first. Public deployment at
-`https://solidnsoft.com/premium-support` comes after local acceptance.
+`https://support.example.com/premium-support` comes after local acceptance.
 
 - Individual customers see only their own tickets; no public registration or guest submissions.
 - Chatwoot administrators invite customers, resend invitations, reset passwords, suspend and reactivate access, and manage the product catalog.
@@ -160,6 +160,6 @@ Expanded metadata/inline-file authorization tests and lint are pending a fresh r
 ## Later deployment prerequisites
 
 Confirm iNet path proxying and public reachability, exact Workspace receiving
-mailbox under `solidnsoft.vn`, company logo asset, and product catalog values.
+mailbox under `example.com`, company logo asset, and product catalog values.
 These do not block local account development. Do not assume that outgoing SMTP
 already provides incoming mail or that a From header alone proves ticket ownership.

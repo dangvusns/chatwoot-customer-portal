@@ -11,7 +11,7 @@ RSpec.describe Tickets::ImportEmailReply do
   end
 
   around do |example|
-    with_modified_env(TICKET_PORTAL_INBOX_ID: inbox.id.to_s, TICKET_SUPPORT_EMAIL: 'support@solidnsoft.vn',
+    with_modified_env(TICKET_PORTAL_INBOX_ID: inbox.id.to_s, TICKET_SUPPORT_EMAIL: 'support@example.com',
                       TICKET_EMAIL_REPLIES_ENABLED: 'true', FRONTEND_URL: 'http://www.example.com') { example.run }
   end
 
@@ -74,12 +74,12 @@ RSpec.describe Tickets::ImportEmailReply do
   end
 
   it 'rejects unknown tokens without creating contacts or tickets' do
-    mail.to = 'support+ticket-00000000-0000-0000-0000-000000000000@solidnsoft.vn'
+    mail.to = 'support+ticket-00000000-0000-0000-0000-000000000000@example.com'
     expect { expect(import_reply).to eq(:ignored) }.not_to change(Conversation, :count)
   end
 
   it 'ignores unrelated messages in the owning mailbox' do
-    mail.to = 'dangvu@solidnsoft.vn'
+    mail.to = 'owner@example.com'
     expect { expect(import_reply).to eq(:ignored) }.not_to change(Message, :count)
   end
 

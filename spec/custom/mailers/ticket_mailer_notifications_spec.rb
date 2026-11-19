@@ -15,7 +15,7 @@ RSpec.describe TicketMailer, type: :mailer do
 
   around do |example|
     with_modified_env(TICKET_PORTAL_INBOX_ID: inbox.id.to_s, FRONTEND_URL: 'http://www.example.com',
-                      TICKET_SUPPORT_EMAIL: 'support@solidnsoft.vn', TICKET_EMAIL_REPLIES_ENABLED: 'true') { example.run }
+                      TICKET_SUPPORT_EMAIL: 'support@example.com', TICKET_EMAIL_REPLIES_ENABLED: 'true') { example.run }
   end
 
   it 'sends a plain-text confirmation with the subject and authenticated portal link' do

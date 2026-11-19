@@ -1,4 +1,5 @@
-FROM chatwoot-company:4.19.1-co.4
+ARG BASE_IMAGE=chatwoot-company:local
+FROM ${BASE_IMAGE}
 
 ENV RAILS_ENV=test \
     NODE_ENV=test \

@@ -8,12 +8,12 @@ RSpec.describe TicketMailer, type: :mailer do
 
   around do |example|
     with_modified_env(TICKET_PORTAL_INBOX_ID: inbox.id.to_s, FRONTEND_URL: 'http://www.example.com',
-                      TICKET_SUPPORT_EMAIL: 'support@solidnsoft.vn', TICKET_EMAIL_REPLIES_ENABLED: 'true') { example.run }
+                      TICKET_SUPPORT_EMAIL: 'support@example.com', TICKET_EMAIL_REPLIES_ENABLED: 'true') { example.run }
   end
 
   it 'uses the alias and ticket token for an active portal customer' do
     mail = described_class.with(account: account).received(conversation)
-    expect(mail.from).to eq(['support@solidnsoft.vn'])
+    expect(mail.from).to eq(['support@example.com'])
     expect(mail.reply_to).to eq([Tickets::EmailRouting.reply_to(conversation)])
     expect(mail.reply_to.first.split('@').first.length).to be <= 64
   end

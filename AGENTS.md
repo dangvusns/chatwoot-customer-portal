@@ -1,6 +1,6 @@
 # Chatwoot Development Guidelines
 
-`CLAUDE.md` is a symlink to this file. Keep shared, repository-wide instructions here and detailed procedures in linked docs. Add nested `AGENTS.md` files only for subtree-specific differences; avoid duplicating root rules.
+`CLAUDE.md` imports this file (`@AGENTS.md`; a real file instead of a symlink so it works on Windows). Keep shared, repository-wide instructions here and detailed procedures in linked docs. Add nested `AGENTS.md` files only for subtree-specific differences; avoid duplicating root rules.
 
 ## Build, Test, and Lint
 

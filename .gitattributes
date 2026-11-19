@@ -1,0 +1,12 @@
+# Force LF so shell/Ruby scripts still run inside the Linux containers after a Windows checkout.
+* text=auto eol=lf
+*.sh text eol=lf
+*.rb text eol=lf
+Dockerfile* text eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

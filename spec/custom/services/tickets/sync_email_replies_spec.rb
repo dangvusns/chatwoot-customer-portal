@@ -4,13 +4,13 @@ RSpec.describe Tickets::SyncEmailReplies do
   let(:account) { create(:account) }
   let(:inbox) { create(:inbox, account: account) }
   let(:imap) { instance_double(Net::IMAP) }
-  let(:key) { "portal-email:#{inbox.id}:support@solidnsoft.vn:123" }
+  let(:key) { "portal-email:#{inbox.id}:support@example.com:123" }
   let(:metadata) { instance_double(Net::IMAP::FetchData, attr: { 'RFC822.SIZE' => 100 }) }
   let(:body_data) { instance_double(Net::IMAP::FetchData, attr: { 'BODY[]' => 'From: customer@example.com' }) }
   let(:oversized_metadata) { instance_double(Net::IMAP::FetchData, attr: { 'RFC822.SIZE' => 80.megabytes }) }
 
   around do |example|
-    with_modified_env(TICKET_PORTAL_INBOX_ID: inbox.id.to_s, TICKET_SUPPORT_EMAIL: 'support@solidnsoft.vn',
+    with_modified_env(TICKET_PORTAL_INBOX_ID: inbox.id.to_s, TICKET_SUPPORT_EMAIL: 'support@example.com',
                       TICKET_EMAIL_REPLIES_ENABLED: 'true', SMTP_USERNAME: 'owner@example.com', SMTP_PASSWORD: 'test-secret') { example.run }
   end
 
